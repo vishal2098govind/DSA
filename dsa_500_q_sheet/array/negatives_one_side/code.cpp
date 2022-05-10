@@ -4,6 +4,7 @@ using namespace std;
 void getNegativesToOneSide(int arr[], int size)
 {
 
+    // j points to 1st positive number or left most positive number
     for (int i = 0, j = 0; i < size; i++)
     {
         if (arr[i] < 0)
