@@ -1,17 +1,22 @@
 #include <iostream>
 #include <set>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
 int performUnionWithoutUsingSet(int a[], int sizeA, int b[], int sizeB, int c[])
 {
     int i = 0;
     int j = 0;
-    int k = 0;
-    for (; k < sizeA + sizeB && i < sizeA && j < sizeB; k++)
+    sort(a, a + sizeA);
+    sort(b, b + sizeB);
+    vector<int> unionC;
+    for (; i < sizeA && j < sizeB;)
     {
         if (a[i] == b[j])
         {
-            c[k] = a[i];
+            // c[k] = a[i];
+            unionC.push_back(a[i]);
             i++;
             j++;
         }
@@ -20,27 +25,46 @@ int performUnionWithoutUsingSet(int a[], int sizeA, int b[], int sizeB, int c[])
             if (a[i] < b[j])
             {
 
-                c[k] = a[i];
+                // c[k] = a[i];
+                unionC.push_back(a[i]);
                 i++;
             }
             else
             {
-                c[k] = b[j];
+                // c[k] = b[j];
+                unionC.push_back(b[j]);
                 j++;
             }
         }
     }
     for (; i < sizeA; i++)
     {
-        c[k] = a[i];
-        k++;
+        // c[k] = a[i];
+        unionC.push_back(a[i]);
     }
     for (; j < sizeB; j++)
     {
-        c[k] = b[j];
-        k++;
+        // c[k] = b[j];
+        unionC.push_back(b[j]);
     }
-    return k;
+
+    int count = 0;
+    for (int i = 0; i < unionC.size(); i++)
+    {
+        if (i > 0)
+        {
+            if (unionC[i] != unionC[i - 1])
+            {
+                count++;
+            }
+        }
+        else
+        {
+            count++;
+        }
+    }
+
+    return count;
 }
 
 set<int> performUnionUsingSet(int a[], int sizeA, int b[], int sizeB)
@@ -59,6 +83,8 @@ set<int> performUnionUsingSet(int a[], int sizeA, int b[], int sizeB)
 
 int intersection(int a[], int sizeA, int b[], int sizeB, int c[])
 {
+    sort(a, a + sizeA);
+    sort(b, b + sizeB);
     int k = 0;
     for (int i = 0, j = 0; k < sizeA + sizeB && i < sizeA && j < sizeB;)
     {
@@ -104,13 +130,14 @@ int main()
     }
 
     int intersectionC[sizeA + sizeB];
+    int unionC[sizeA + sizeB];
 
-    // int sizeOfC = performUnionWithoutUsingSet(a, sizeA, b, sizeB, unionC); //! NOT WORKING FOR ALL TEST CASES
-    set<int> unionC = performUnionUsingSet(a, sizeA, b, sizeB);
+    int sizeOfC = performUnionWithoutUsingSet(a, sizeA, b, sizeB, unionC);
+    // set<int> unionC = performUnionUsingSet(a, sizeA, b, sizeB);
     int sizeOfIntersectionC = intersection(a, sizeA, b, sizeB, intersectionC);
 
     cout << "Union" << endl;
-    cout << "Size of union " << unionC.size() << endl;
+    cout << "Size of union " << sizeOfC << endl;
     cout << "Intersection" << endl;
     for (int i = 0; i < sizeOfIntersectionC; i++)
     {
