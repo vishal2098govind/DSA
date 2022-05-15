@@ -4,7 +4,7 @@
 #include <algorithm>
 using namespace std;
 
-int performUnionWithoutUsingSet(int a[], int sizeA, int b[], int sizeB, int c[])
+int performUnionWithoutUsingSet(int a[], int sizeA, int b[], int sizeB)
 {
     int i = 0;
     int j = 0;
@@ -15,8 +15,11 @@ int performUnionWithoutUsingSet(int a[], int sizeA, int b[], int sizeB, int c[])
     {
         if (a[i] == b[j])
         {
-            // c[k] = a[i];
-            unionC.push_back(a[i]);
+            // To handle duplicate values in same array i.e. in left array or right array
+            if (unionC.size() == 0 || unionC.back() != a[i])
+            {
+                unionC.push_back(a[i]);
+            }
             i++;
             j++;
         }
@@ -24,30 +27,42 @@ int performUnionWithoutUsingSet(int a[], int sizeA, int b[], int sizeB, int c[])
         {
             if (a[i] < b[j])
             {
-
-                // c[k] = a[i];
-                unionC.push_back(a[i]);
+                // To handle duplicate values in same array i.e. in left array or right array
+                if (unionC.back() == 0 || unionC.back() != a[i])
+                {
+                    unionC.push_back(a[i]);
+                }
                 i++;
             }
             else
             {
-                // c[k] = b[j];
-                unionC.push_back(b[j]);
+                // To handle duplicate values in same array i.e. in left array or right array
+                if (unionC.back() == 0 || unionC.back() != b[j])
+                {
+                    unionC.push_back(b[j]);
+                }
                 j++;
             }
         }
     }
     for (; i < sizeA; i++)
     {
-        // c[k] = a[i];
-        unionC.push_back(a[i]);
+        // To handle duplicate values in same array i.e. in left array or right array
+        if (unionC.size() == 0 || unionC.back() != a[i])
+        {
+            unionC.push_back(a[i]);
+        }
     }
     for (; j < sizeB; j++)
     {
-        // c[k] = b[j];
-        unionC.push_back(b[j]);
+        // To handle duplicate values in same array i.e. in left array or right array
+        if (unionC.size() == 0 || unionC.back() != b[j])
+        {
+            unionC.push_back(b[j]);
+        }
     }
 
+    // To handle duplicate values in same array i.e. in left array or right array
     int count = 0;
     for (int i = 0; i < unionC.size(); i++)
     {
@@ -130,9 +145,8 @@ int main()
     }
 
     int intersectionC[sizeA + sizeB];
-    int unionC[sizeA + sizeB];
 
-    int sizeOfC = performUnionWithoutUsingSet(a, sizeA, b, sizeB, unionC);
+    int sizeOfC = performUnionWithoutUsingSet(a, sizeA, b, sizeB);
     // set<int> unionC = performUnionUsingSet(a, sizeA, b, sizeB);
     int sizeOfIntersectionC = intersection(a, sizeA, b, sizeB, intersectionC);
 
